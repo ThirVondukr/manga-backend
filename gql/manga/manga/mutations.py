@@ -9,7 +9,7 @@ from db.dependencies import get_session
 from db.models.manga import Manga, MangaLike
 from gql.exceptions import NotAuthenticated, NotFound
 from gql.manga.manga.types import MangaType
-from gql.users.auth import get_user
+from gql.users.context import get_current_user_from_context
 
 
 @strawberry.type
@@ -29,7 +29,7 @@ class Mutation:
     async def set_manga_liked(
         self, info: Info, manga_id: UUID, liked: bool = True
     ) -> LikeMangaResponse:
-        user = get_user(info)
+        user = await get_current_user_from_context()
         if user is None:
             return NotAuthenticated()
 

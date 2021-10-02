@@ -7,7 +7,7 @@ from sqlalchemy.engine import Result
 
 from db.dependencies import get_session
 from db.models.manga.likes import MangaLike
-from gql.users.auth import MaybeUser
+from gql.users.context import get_current_user_from_context
 
 
 class MangaLoaders(enum.Enum):
@@ -28,9 +28,11 @@ async def load_user_liked_manga_count(user_ids: List[UUID]) -> List[int]:
     return [results.get(user_id, 0) for user_id in user_ids]
 
 
-async def load_is_liked_by_viewer(manga_ids: List[UUID], user: MaybeUser) -> List[bool]:
+async def load_is_liked_by_viewer(manga_ids: List[UUID]) -> List[bool]:
+    user = await get_current_user_from_context()
     if user is None:
         return [False for _ in manga_ids]
+
     query = select(MangaLike).filter(
         MangaLike.user_id == user.id, MangaLike.manga_id.in_(manga_ids)
     )

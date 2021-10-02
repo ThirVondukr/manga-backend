@@ -2,16 +2,15 @@ from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import select
-from strawberry.types import Info
 
 from db.dependencies import get_session
 from db.models.users import User
-from gql.users.auth import get_user
+from gql.users.context import get_current_user_from_context
 from gql.users.types import UserType
 
 
-async def get_viewer(info: Info) -> Optional[UserType]:
-    user = get_user(info)
+async def get_viewer() -> Optional[UserType]:
+    user = await get_current_user_from_context()
     return UserType.maybe_from_orm(user)
 
 

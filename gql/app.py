@@ -13,8 +13,7 @@ import gql.users
 from gql import users
 from gql.manga.info.loaders import load_manga_info
 from gql.root import Root, Mutation
-from gql.users import auth
-from gql.users.auth import MaybeUser
+from gql.users.context import create_current_user_context
 from gql.users.loaders import load_is_liked_by_viewer, MangaLoaders
 
 
@@ -26,18 +25,14 @@ class MyGraphQL(GraphQL):
     ) -> Optional[Any]:
         ctx: dict = await super().get_context(request, response)
 
-        user: MaybeUser = None
-        if isinstance(request, Request):
-            user = await auth.get_user_from_request(request=request)
-            auth.put_user_into_context(ctx, user)
-
+        create_current_user_context(request)
         ctx.update(
             {
                 MangaLoaders.user_liked_manga_count: DataLoader(
                     users.loaders.load_user_liked_manga_count
                 ),
                 MangaLoaders.manga_is_liked_by_viewer: DataLoader(
-                    partial(load_is_liked_by_viewer, user=user)
+                    partial(load_is_liked_by_viewer)
                 ),
                 "manga_loader": DataLoader(load_fn=gql.manga.manga.loaders.load_manga),
                 "manga_info_loader": DataLoader(load_fn=load_manga_info),

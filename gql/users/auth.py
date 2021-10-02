@@ -4,7 +4,6 @@ from jose import jwt, JWTError
 from sqlalchemy import select
 from sqlalchemy.engine import Result
 from starlette.requests import Request
-from strawberry.types import Info
 
 from db.dependencies import get_session
 from db.models.users import User
@@ -12,18 +11,8 @@ from modules.auth import settings as auth_settings
 
 _CURRENT_USER_KEY = "Auth_CurrentUser"
 
-MaybeUser = Optional[User]
 
-
-def get_user(info: Info) -> MaybeUser:
-    return info.context[_CURRENT_USER_KEY]
-
-
-def put_user_into_context(ctx: dict, user: MaybeUser):
-    ctx[_CURRENT_USER_KEY] = user
-
-
-async def get_user_from_request(request: Request) -> MaybeUser:
+async def get_user_from_request(request: Request) -> Optional[User]:
     if "Authorization" not in request.headers:
         return None
 
