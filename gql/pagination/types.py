@@ -43,7 +43,7 @@ class Edge(Generic[Node, Cursor]):
 
 @strawberry.type
 class PageInfo(Generic[Cursor]):
-    endCursor: Cursor
+    end_cursor: Cursor
     has_next_page: bool
 
 
