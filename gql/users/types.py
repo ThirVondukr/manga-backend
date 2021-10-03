@@ -10,9 +10,9 @@ from db.dependencies import get_session
 from db.models.manga import MangaLike, Manga
 from db.models.users import User
 from gql.manga.chapters.resolvers import get_user_chapters_feed
-from gql.manga.chapters.types import LatestMangaChapters
+from gql.manga.chapters.types import MangaChapterType
 from gql.manga.manga.types import MangaType
-from gql.pagination.types import PaginationInput, PaginationPydantic
+from gql.pagination.types import PaginationInput, PaginationPydantic, Connection
 from gql.users.loaders import MangaLoaders
 
 
@@ -67,7 +67,7 @@ class UserType:
         self,
         first: int,
         after: Optional[datetime] = None,
-    ) -> LatestMangaChapters:
+    ) -> Connection[MangaChapterType, datetime]:
         return await get_user_chapters_feed(
             user=cast(User, self),
             first=first,
