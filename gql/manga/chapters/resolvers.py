@@ -12,41 +12,36 @@ from gql.manga.chapters.types import (
     LatestChaptersEdge,
     LatestChaptersPageInfo,
     LatestMangaChapters,
+    MangaChapterType,
 )
+from gql.pagination.types import Connection, PageInfo, Edge
 
 
 async def resolve_latest_manga_chapters(
     first: int,
     after: Optional[datetime.datetime] = None,
-) -> LatestMangaChapters:
+) -> Connection[MangaChapterType, datetime.datetime]:
     # Query first + 1 entities to know if we have next page
-    query = (
-        select(MangaChapter).order_by(MangaChapter.published_at.desc()).limit(first + 1)
-    )
+    query = select(MangaChapter).order_by(MangaChapter.published_at.desc()).limit(first + 1)
+
     if after:
         query = query.filter(after > MangaChapter.published_at)
 
     async with get_session() as session:
-        total_count: int = (
-            await session.execute(select(count(MangaChapter.id)))
-        ).scalar_one()
-        chapters_result = await session.execute(query)
-        chapters = list(map(LatestChaptersEdge.from_chapter, chapters_result.scalars()))
+        chapters = list(map(MangaChapterType.from_orm, await session.scalars(query)))
 
-        if not chapters:
-            return LatestMangaChapters(
-                edges=[],
-                page_info=LatestChaptersPageInfo(None, False),
-                total_count=total_count,
-            )
+    if not chapters:
+        return Connection(
+            edges=[],
+            page_info=PageInfo(None, False),
+        )
 
     has_next_page = len(chapters) > first
-    end_cursor = chapters[-2 if has_next_page else -1].node.published_at
+    end_cursor = chapters[-2 if has_next_page else -1].published_at
 
-    return LatestMangaChapters(
-        edges=chapters[:first],
-        page_info=LatestChaptersPageInfo(end_cursor, has_next_page),
-        total_count=total_count,
+    return Connection(
+        edges=[Edge(node=chapter, cursor=chapter.published_at) for chapter in chapters],
+        page_info=PageInfo(end_cursor, has_next_page),
     )
 
 
