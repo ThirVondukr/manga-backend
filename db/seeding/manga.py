@@ -4,6 +4,7 @@ import slugify
 
 from db.dependencies import get_session
 from db.models.manga import Manga, MangaArt
+from db.seeding import artists, info
 
 
 async def seed_manga():
@@ -16,4 +17,11 @@ async def seed_manga():
                 arts=[manga_cover],
             )
             session.add(manga)
+
+            manga_info = info.create_manga_info(manga=manga)
+            session.add(manga_info)
+
+            author, relationships = artists.create_manga_author(manga=manga)
+            session.add(author)
+            session.add_all(relationships)
         await session.commit()

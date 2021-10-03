@@ -1,11 +1,14 @@
 import enum
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, String, ForeignKey, Enum
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship, Mapped
 
 from db.base import Base
+if TYPE_CHECKING:
+    from db.models.manga import Manga
 
 
 class AuthorRelationshipType(enum.Enum):
@@ -38,6 +41,7 @@ class AuthorRelationship(Base):
         nullable=False,
         primary_key=True,
     )
+    manga: "Manga" = relationship("Manga")
     type: AuthorRelationshipType = Column(
         Enum(AuthorRelationshipType), nullable=False, primary_key=True
     )
