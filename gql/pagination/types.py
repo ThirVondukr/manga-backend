@@ -42,6 +42,12 @@ class Edge(Generic[Node, Cursor]):
 
 
 @strawberry.type
+class PageInfo(Generic[Cursor]):
+    endCursor: Cursor
+    has_next_page: bool
+
+
+@strawberry.type
 class Connection(Generic[Node, Cursor]):
     edges: List[Edge]
-    total_count: int
+    page_info: PageInfo
