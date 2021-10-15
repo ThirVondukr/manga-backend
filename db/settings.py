@@ -3,7 +3,7 @@ from pydantic import BaseSettings
 
 class DatabaseSettings(BaseSettings):
     class Config:
-        env_file = "env/database.env"
+        env_prefix = "db_"
 
     database_url: str
     echo: bool
