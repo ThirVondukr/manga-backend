@@ -14,7 +14,7 @@ from gql.pagination.types import Connection, PageInfo, Edge
 async def resolve_latest_manga_chapters(
     first: int,
     after: Optional[datetime.datetime] = None,
-) -> Connection[MangaChapterType, datetime.datetime]:
+) -> Connection[MangaChapterType]:
     # Query first + 1 entities to know if we have next page
     query = select(MangaChapter).order_by(MangaChapter.published_at.desc()).limit(first + 1)
 
@@ -43,7 +43,7 @@ async def get_user_chapters_feed(
     user: User,
     first: int,
     after: Optional[datetime.datetime] = None,
-) -> Connection[MangaChapterType, datetime.datetime]:
+) -> Connection[MangaChapterType]:
     query = (
         select(MangaChapter)
         .join(MangaLike, MangaLike.manga_id == MangaChapter.manga_id)
@@ -52,7 +52,7 @@ async def get_user_chapters_feed(
         .limit(first + 1)
     )
     if after:
-        query = query.filter(MangaChapter.published_at > after)
+        query = query.filter(MangaChapter.published_at < after)
 
     async with get_session() as session:
         chapters: List[MangaChapter] = (await session.execute(query)).unique().scalars().all()
@@ -60,7 +60,10 @@ async def get_user_chapters_feed(
     has_next_page = len(chapters) > first
     chapters = chapters[:-1] if has_next_page else chapters
     chapter_types = [MangaChapterType.from_orm(c) for c in chapters]
+    if not chapter_types:
+        return Connection([], page_info=PageInfo("", False))
+
     return Connection(
         edges=[Edge(node=chapter, cursor=chapter.published_at) for chapter in chapter_types],
-        page_info=PageInfo(max(c.published_at for c in chapter_types), has_next_page),
+        page_info=PageInfo(chapter_types[-1].published_at, has_next_page),
     )

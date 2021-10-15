@@ -1,8 +1,18 @@
+from __future__ import annotations
+
 from typing import TypeVar, Generic, List
 
 import strawberry
 from pydantic import BaseModel, conint
 from sqlalchemy.sql import Select
+
+TNode = TypeVar("TNode")
+
+
+@strawberry.type
+class PagePagination(Generic[TNode]):
+    page_info: PagePaginationPageInfo
+    items: List[TNode]
 
 
 @strawberry.type
@@ -14,7 +24,7 @@ class PagePaginationPageInfo:
     total_pages: int
 
 
-class PaginationPydantic(BaseModel):
+class PaginationInputPydantic(BaseModel):
     page: conint(ge=1) = 1
     page_size: conint(ge=1, le=100) = 10
 
@@ -23,7 +33,7 @@ class PaginationPydantic(BaseModel):
 
 
 @strawberry.experimental.pydantic.input(
-    model=PaginationPydantic,
+    model=PaginationInputPydantic,
     fields=["page", "page_size"],
     name="Pagination",
 )
@@ -31,23 +41,19 @@ class PaginationInput:
     pass
 
 
-Node = TypeVar("Node")
-Cursor = TypeVar("Cursor")
+@strawberry.type
+class Edge(Generic[TNode]):
+    node: TNode
+    cursor: str
 
 
 @strawberry.type
-class Edge(Generic[Node, Cursor]):
-    node: Node
-    cursor: Cursor
-
-
-@strawberry.type
-class PageInfo(Generic[Cursor]):
-    end_cursor: Cursor
+class PageInfo:
+    end_cursor: str
     has_next_page: bool
 
 
 @strawberry.type
-class Connection(Generic[Node, Cursor]):
+class Connection(Generic[TNode]):
     edges: List[Edge]
     page_info: PageInfo

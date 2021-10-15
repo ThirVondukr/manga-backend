@@ -15,7 +15,7 @@ from db.models.manga.chapters import MangaChapter
 from gql.manga.chapters.types import MangaChapterType
 from gql.pagination.types import (
     PagePaginationPageInfo,
-    PaginationPydantic,
+    PaginationInputPydantic,
     PaginationInput,
 )
 
@@ -30,7 +30,7 @@ async def get_manga_chapters(
     manga_id: UUID,
     pagination: PaginationInput,
 ) -> MangaChaptersPaginationResponse:
-    pagination_pydantic: PaginationPydantic = pagination.to_pydantic()
+    pagination_pydantic: PaginationInputPydantic = pagination.to_pydantic()
     chapters_query: Select = (
         select(MangaChapter)
         .order_by(
