@@ -23,8 +23,8 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
-    app.include_router(users_router, prefix="/users", tags=["Users"])
+    app.include_router(auth_router, prefix="/api/auth", tags=["Authentication"])
+    app.include_router(users_router, prefix="/api/users", tags=["Users"])
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
     app.mount("/graphql", graphql_app)
