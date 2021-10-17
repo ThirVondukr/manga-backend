@@ -17,6 +17,7 @@ class MangaPage(Base):
     __tablename__ = "manga__pages"
 
     id: Mapped[int] = Column(Integer, primary_key=True, nullable=False)
+    number: Mapped[int] = Column(Integer, nullable=False)
     image_url: Mapped[str] = Column(String, nullable=False)
 
     chapter_id: Mapped[uuid.UUID] = Column(
