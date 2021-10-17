@@ -8,11 +8,15 @@ from sqlalchemy.orm import selectinload
 
 from db.dependencies import get_session
 from db.models.manga import Manga, MangaChapter
+from . import pages, ROOT_PATH
 
 _fake = faker.Faker()
 
 
-async def _seed_preset_manga_chapters(session: AsyncSession, manga_directory: Path):
+async def _seed_preset_manga_chapters(
+    session: AsyncSession,
+    manga_directory: Path,
+):
     query = (
         select(Manga)
         .options(selectinload(Manga.chapters))
@@ -35,6 +39,11 @@ async def _seed_preset_manga_chapters(session: AsyncSession, manga_directory: Pa
                 published_at=published_at,
             )
             manga.chapters.append(chapter)
+            await pages.seed_preset_pages(
+                chapter=chapter,
+                chapter_directory=chapter_directory,
+                session=session,
+            )
 
 
 async def _seed_manga_chapters(
@@ -54,7 +63,7 @@ async def _seed_manga_chapters(
 
 async def seed_chapters():
     async with get_session() as session:
-        for directory in Path("static/manga").iterdir():
+        for directory in ROOT_PATH.joinpath("static/manga").iterdir():
             await _seed_preset_manga_chapters(session, directory)
         await session.commit()
 
