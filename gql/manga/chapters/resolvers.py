@@ -8,6 +8,7 @@ from db.models.manga import MangaLike
 from db.models.manga.chapters import MangaChapter
 from db.models.users import User
 from gql.manga.chapters.types import MangaChapterType
+from gql.pagination.pagination import CursorPaginator
 from gql.pagination.types import Connection, PageInfo, Edge
 
 
@@ -19,23 +20,18 @@ async def resolve_latest_manga_chapters(
     query = select(MangaChapter).order_by(MangaChapter.published_at.desc()).limit(first + 1)
 
     if after:
-        query = query.filter(after > MangaChapter.published_at)
+        query = query.filter(MangaChapter.published_at <= after)
 
     async with get_session() as session:
-        chapters = list(map(MangaChapterType.from_orm, await session.scalars(query)))
+        chapters = list(await session.scalars(query))
 
-    if not chapters:
-        return Connection(
-            edges=[],
-            page_info=PageInfo(None, False),
-        )
-
-    has_next_page = len(chapters) > first
-    end_cursor = chapters[-2 if has_next_page else -1].published_at
-
-    return Connection(
-        edges=[Edge(node=chapter, cursor=chapter.published_at) for chapter in chapters],
-        page_info=PageInfo(end_cursor, has_next_page),
+    paginator = CursorPaginator(
+        type_cls=MangaChapterType,
+        cursor_func=lambda c: str(c.published_at),
+    )
+    return paginator.parse_sequence(
+        sequence=chapters,
+        first=first,
     )
 
 
