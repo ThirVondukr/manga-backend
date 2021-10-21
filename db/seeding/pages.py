@@ -13,11 +13,12 @@ async def seed_preset_pages(
     session: AsyncSession
 ):
     pages = []
-    for page_path in chapter_directory.iterdir():
+    for page_number, page_path in enumerate(chapter_directory.iterdir(), start=1):
         relative_path = page_path.relative_to(ROOT_PATH.joinpath("static"))
         page = MangaPage(
             image_url=str(relative_path).replace("\\", "/"),
             chapter=chapter,
+            number=page_number,
         )
         pages.append(page)
     session.add_all(pages)
