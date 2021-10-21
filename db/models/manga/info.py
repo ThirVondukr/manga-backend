@@ -17,11 +17,16 @@ if TYPE_CHECKING:
 class MangaInfo(Base):
     __tablename__ = "manga__manga_info"
 
-    id: Mapped[uuid.UUID] = _fields.UUID_PK
+    id: Mapped[uuid.UUID] = Column(
+        UUID(as_uuid=True),
+        default=uuid.uuid4,
+        primary_key=True,
+        nullable=False,
+    )
 
-    lang = Column(_fields.LANGUAGE_STR, nullable=False)
-    title = Column(String(length=255), nullable=False)
-    description = Column(String(length=2047), nullable=True)
+    lang: Mapped[str] = Column(String(length=2), nullable=False)
+    title: Mapped[str] = Column(String(length=255), nullable=False)
+    description: Mapped[str] = Column(String(length=2047), nullable=True)
 
     manga_id: Mapped[uuid.UUID] = Column(
         UUID(as_uuid=True),

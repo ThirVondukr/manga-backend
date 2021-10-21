@@ -23,4 +23,4 @@ class MangaPage(Base):
     chapter_id: Mapped[uuid.UUID] = Column(
         UUID(as_uuid=True), ForeignKey("manga__chapters.id"), nullable=False
     )
-    chapter: MangaChapter = relationship("MangaChapter", back_populates="pages")
+    chapter: Mapped[MangaChapter] = relationship("MangaChapter", back_populates="pages")

@@ -27,11 +27,15 @@ class Manga(Base, DateTimeMixin):
 
     infos = relationship(MangaInfo, uselist=True)
     arts = relationship(MangaArt, uselist=True)
-    chapters: MangaChapter = relationship(
-        "MangaChapter", back_populates="manga", uselist=True
+    chapters: Mapped[MangaChapter] = relationship(
+        "MangaChapter",
+        back_populates="manga",
+        uselist=True,
     )
-    liked_by: User = relationship(
-        "User", backref="liked_manga", secondary=MangaLike.__table__
+    liked_by: Mapped[User] = relationship(
+        "User",
+        backref="liked_manga",
+        secondary=MangaLike.__table__,
     )
 
     likes_count: Mapped[int] = column_property(
