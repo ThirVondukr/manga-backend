@@ -2,11 +2,8 @@ import enum
 
 from strawberry.dataloader import DataLoader
 
-import gql.manga
 from gql import users
-from gql.manga.info.loaders import load_manga_infos
-from gql.manga.pages.loaders import load_chapter_pages
-from gql.users.loaders import load_is_liked_by_viewer
+from gql.manga import art, authors, info, manga, pages
 
 
 class Loaders(enum.Enum):
@@ -26,14 +23,14 @@ class Loaders(enum.Enum):
 
 def _create_data_loaders():
     return {
-        Loaders.user_liked_manga_count: DataLoader(users.loaders.load_user_liked_manga_count),
-        Loaders.manga_is_liked_by_viewer: DataLoader(load_is_liked_by_viewer),
-        Loaders.manga: DataLoader(gql.manga.manga.loaders.load_manga),
-        Loaders.manga_infos: DataLoader(load_manga_infos),
-        Loaders.manga_arts: DataLoader(gql.manga.art.loaders.load_manga_arts),
-        Loaders.manga_cover: DataLoader(gql.manga.art.loaders.load_manga_cover),
-        Loaders.manga_likes_count: DataLoader(gql.manga.manga.loaders.load_manga_likes),
-        Loaders.manga_artists: DataLoader(gql.manga.authors.loaders.load_manga_artists),
-        Loaders.manga_writers: DataLoader(gql.manga.authors.loaders.load_manga_writers),
-        Loaders.chapter_pages: DataLoader(load_chapter_pages)
+        Loaders.manga: DataLoader(manga.loaders.load_manga),
+        Loaders.manga_infos: DataLoader(info.loaders.manga_infos),
+        Loaders.manga_arts: DataLoader(art.loaders.manga_arts),
+        Loaders.manga_cover: DataLoader(art.loaders.manga_cover),
+        Loaders.manga_likes_count: DataLoader(manga.loaders.manga_likes),
+        Loaders.manga_artists: DataLoader(authors.loaders.manga_artists),
+        Loaders.manga_writers: DataLoader(authors.loaders.manga_writers),
+        Loaders.manga_is_liked_by_viewer: DataLoader(users.loaders.manga_is_liked_by_viewer),
+        Loaders.user_liked_manga_count: DataLoader(users.loaders.user_liked_manga_count),
+        Loaders.chapter_pages: DataLoader(pages.loaders.load_chapter_pages)
     }

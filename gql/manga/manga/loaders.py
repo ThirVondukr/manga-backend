@@ -18,7 +18,7 @@ async def load_manga(manga_ids: List[UUID]) -> List[Optional[Manga]]:
     return [manga_by_ids.get(manga_id) for manga_id in manga_ids]
 
 
-async def load_manga_likes(manga_ids: List[UUID]) -> List[int]:
+async def manga_likes(manga_ids: List[UUID]) -> List[int]:
     query = (
         select(Manga)
         .filter(Manga.id.in_(manga_ids))

@@ -9,7 +9,7 @@ from db.models.manga.likes import MangaLike
 from gql.users.context import get_current_user_from_context
 
 
-async def load_user_liked_manga_count(user_ids: List[UUID]) -> List[int]:
+async def user_liked_manga_count(user_ids: List[UUID]) -> List[int]:
     query = (
         select(MangaLike.user_id, func.count(MangaLike.user_id))
         .group_by(MangaLike.user_id)
@@ -22,7 +22,7 @@ async def load_user_liked_manga_count(user_ids: List[UUID]) -> List[int]:
     return [results.get(user_id, 0) for user_id in user_ids]
 
 
-async def load_is_liked_by_viewer(manga_ids: List[UUID]) -> List[bool]:
+async def manga_is_liked_by_viewer(manga_ids: List[UUID]) -> List[bool]:
     user = await get_current_user_from_context()
     if user is None:
         return [False for _ in manga_ids]

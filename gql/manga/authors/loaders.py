@@ -43,5 +43,5 @@ def _make_load_fn(author_type: AuthorRelationshipType):
     return load_fn
 
 
-load_manga_artists = _make_load_fn(author_type=AuthorRelationshipType.artist)
-load_manga_writers = _make_load_fn(author_type=AuthorRelationshipType.writer)
+manga_artists = _make_load_fn(author_type=AuthorRelationshipType.artist)
+manga_writers = _make_load_fn(author_type=AuthorRelationshipType.writer)
