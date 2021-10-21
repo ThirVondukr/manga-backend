@@ -61,14 +61,22 @@ async def get_user_chapters_feed(
         return Connection([], page_info=PageInfo("", False))
 
     return Connection(
-        edges=[Edge(node=chapter, cursor=chapter.published_at) for chapter in chapter_types],
-        page_info=PageInfo(chapter_types[-1].published_at, has_next_page),
+        edges=[
+            Edge(
+                node=chapter,
+                cursor=str(chapter.published_at),
+            ) for chapter in chapter_types
+        ],
+        page_info=PageInfo(
+            end_cursor=str(chapter_types[-1].published_at),
+            has_next_page=has_next_page,
+        ),
     )
 
 
 async def get_chapter_by_id(chapter_id: UUID) -> MangaChapterType:
     query = select(MangaChapter).filter(MangaChapter.id == chapter_id)
     async with get_session() as session:
-        chapter = await session.scalar(query)
+        chapter: MangaChapter = await session.scalar(query)
 
-    return chapter
+    return MangaChapterType.from_orm(chapter)
