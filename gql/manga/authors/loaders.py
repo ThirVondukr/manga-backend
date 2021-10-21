@@ -17,7 +17,7 @@ def _get_authors_query(manga_ids: List[UUID], type_: AuthorRelationshipType) -> 
         .options(joinedload(AuthorRelationship.author))
         .filter(
             AuthorRelationship.manga_id.in_(manga_ids),
-            AuthorRelationship.type == AuthorRelationshipType.artist,
+            AuthorRelationship.type == type_,
         )
     )
 
@@ -44,4 +44,4 @@ def _make_load_fn(author_type: AuthorRelationshipType):
 
 
 load_manga_artists = _make_load_fn(author_type=AuthorRelationshipType.artist)
-load_manga_writers = _make_load_fn(author_type=AuthorRelationshipType.artist)
+load_manga_writers = _make_load_fn(author_type=AuthorRelationshipType.writer)
