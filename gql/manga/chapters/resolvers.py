@@ -1,5 +1,6 @@
 import datetime
 from typing import Optional, List
+from uuid import UUID
 
 from sqlalchemy import select
 
@@ -63,3 +64,11 @@ async def get_user_chapters_feed(
         edges=[Edge(node=chapter, cursor=chapter.published_at) for chapter in chapter_types],
         page_info=PageInfo(chapter_types[-1].published_at, has_next_page),
     )
+
+
+async def get_chapter_by_id(chapter_id: UUID) -> MangaChapterType:
+    query = select(MangaChapter).filter(MangaChapter.id == chapter_id)
+    async with get_session() as session:
+        chapter = await session.scalar(query)
+
+    return chapter
