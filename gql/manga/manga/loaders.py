@@ -26,7 +26,7 @@ async def load_manga_likes(manga_ids: List[UUID]) -> List[int]:
     )
 
     async with get_session() as session:
-        manga: Iterable[Manga] = (await session.execute(query)).scalars()
+        manga: Iterable[Manga] = await session.scalars(query)
 
     manga_likes_by_manga_id = {m.id: m.likes_count for m in manga}
     return [manga_likes_by_manga_id.get(manga_id, 0) for manga_id in manga_ids]
