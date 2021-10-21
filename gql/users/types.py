@@ -10,6 +10,7 @@ from strawberry.types import Info
 from db.dependencies import get_session
 from db.models.manga import MangaLike, Manga
 from db.models.users import User
+from gql._loaders import Loaders
 from gql.manga.chapters.resolvers import get_user_chapters_feed
 from gql.manga.chapters.types import MangaChapterType
 from gql.manga.manga.types import MangaType
@@ -17,7 +18,6 @@ from gql.pagination.types import (
     PaginationInput, PaginationInputPydantic, Connection, PagePagination,
     PagePaginationPageInfo,
 )
-from gql.users.loaders import MangaLoaders
 
 
 @strawberry.type(name="User")
@@ -31,7 +31,7 @@ class UserType:
     @strawberry.field
     def liked_manga_count(self, info: Info) -> int:
         return cast(
-            int, info.context[MangaLoaders.user_liked_manga_count].load(self.id)
+            int, info.context[Loaders.user_liked_manga_count].load(self.id)
         )
 
     @classmethod
@@ -56,9 +56,9 @@ class UserType:
 
         manga_query = (
             select(Manga)
-            .join(MangaLike)
-            .filter(MangaLike.user_id == self.id)
-            .order_by(Manga.title_slug)
+                .join(MangaLike)
+                .filter(MangaLike.user_id == self.id)
+                .order_by(Manga.title_slug)
         )
         likes_count_query = select(func.count(MangaLike.manga_id)).filter(MangaLike.user_id == self.id)
         manga_query = pagination_pydantic.apply_to_query(manga_query)

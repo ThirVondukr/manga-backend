@@ -8,7 +8,7 @@ from db.dependencies import get_session
 from db.models.manga import MangaInfo
 
 
-async def load_manga_info(manga_ids: List[UUID]) -> List[List[MangaInfo]]:
+async def load_manga_infos(manga_ids: List[UUID]) -> List[List[MangaInfo]]:
     query = select(MangaInfo).filter(MangaInfo.manga_id.in_(manga_ids))
     async with get_session() as session:
         infos: Iterable[MangaInfo] = (await session.execute(query)).scalars()

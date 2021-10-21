@@ -10,6 +10,7 @@ from strawberry import LazyType
 from strawberry.types import Info
 
 from db.models.manga.chapters import MangaChapter
+from gql._loaders import Loaders
 from gql.manga.pages.types import MangaPageType
 
 MangaType = LazyType["MangaType", "gql.manga.manga.types"]
@@ -29,7 +30,7 @@ class MangaChapterType:
 
     @strawberry.field
     async def manga(self, info: Info) -> MangaType:
-        loader = info.context["manga_loader"]
+        loader = info.context[Loaders.manga]
         return typing.cast(
             MangaType,
             await loader.load(self.manga_id),
@@ -37,7 +38,7 @@ class MangaChapterType:
 
     @strawberry.field
     async def pages(self, info: Info) -> List[MangaPageType]:
-        loader = info.context["chapter_pages_loader"]
+        loader = info.context[Loaders.chapter_pages]
         return await loader.load(self.id)
 
     @classmethod

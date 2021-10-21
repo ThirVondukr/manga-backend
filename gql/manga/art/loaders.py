@@ -9,7 +9,7 @@ from db.dependencies import get_session
 from db.models.manga.art import MangaArt
 
 
-async def load_manga_art(manga_ids: List[UUID]) -> List[List[MangaArt]]:
+async def load_manga_arts(manga_ids: List[UUID]) -> List[List[MangaArt]]:
     query = select(MangaArt).filter(MangaArt.manga_id.in_(manga_ids))
     async with get_session() as session:
         result: Result = await session.execute(query)

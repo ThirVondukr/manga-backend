@@ -1,4 +1,3 @@
-import enum
 from typing import List, Dict
 from uuid import UUID
 
@@ -8,11 +7,6 @@ from sqlalchemy.engine import Result
 from db.dependencies import get_session
 from db.models.manga.likes import MangaLike
 from gql.users.context import get_current_user_from_context
-
-
-class MangaLoaders(enum.Enum):
-    user_liked_manga_count = "user_liked_manga_count"
-    manga_is_liked_by_viewer = "manga_is_liked_by_viewer"
 
 
 async def load_user_liked_manga_count(user_ids: List[UUID]) -> List[int]:
