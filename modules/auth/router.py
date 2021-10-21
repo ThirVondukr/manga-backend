@@ -8,7 +8,7 @@ from sqlalchemy.exc import NoResultFound
 from db.models.users import User
 from modules.auth.services import HashingService
 from modules.users.services import UserService
-from . import settings
+from settings import settings
 
 auth_router = APIRouter()
 

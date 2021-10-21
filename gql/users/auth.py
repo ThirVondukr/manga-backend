@@ -7,7 +7,7 @@ from starlette.requests import Request
 
 from db.dependencies import get_session
 from db.models.users import User
-from modules.auth import settings as auth_settings
+from settings import settings as auth_settings
 
 _CURRENT_USER_KEY = "Auth_CurrentUser"
 

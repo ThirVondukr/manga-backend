@@ -4,7 +4,7 @@ from jose import jwt, JWTError
 
 from db.models.users import User
 from modules.users.services import UserService
-from . import settings
+from settings import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
