@@ -8,15 +8,16 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship, Mapped
 
 from db import _fields
-from db._mixins import UUIDMixin
 from db.base import Base
 
 if TYPE_CHECKING:
     from db.models.manga import Manga
 
 
-class MangaInfo(Base, UUIDMixin):
+class MangaInfo(Base):
     __tablename__ = "manga__manga_info"
+
+    id: Mapped[uuid.UUID] = _fields.UUID_PK
 
     lang = Column(_fields.LANGUAGE_STR, nullable=False)
     title = Column(String(length=255), nullable=False)

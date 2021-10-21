@@ -9,5 +9,5 @@ engine = create_async_engine(
     future=True,
     pool_size=20,
 )
-Base: type = declarative_base(bind=engine)
+Base = declarative_base(bind=engine)
 Session = sessionmaker(future=True, class_=AsyncSession, bind=engine)
