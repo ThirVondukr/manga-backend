@@ -24,7 +24,7 @@ LikeMangaResponse = strawberry.union(
 
 
 @strawberry.type
-class Mutation:
+class MangaMutation:
     @strawberry.mutation
     async def set_manga_liked(self, info: Info, manga_id: UUID, liked: bool = True) -> LikeMangaResponse:
         user = await get_current_user_from_context()

@@ -1,22 +1,9 @@
-import strawberry
+from strawberry.tools import merge_types
 
-from . import manga
-from .manga.chapters.root import ChaptersRoot
-from .manga.manga.root import MangaRoot
-from .users.root import UsersRoot
+from .manga.chapters.query import ChaptersQuery
+from .manga.manga.mutations import MangaMutation
+from .manga.manga.query import MangaQuery
+from .users.query import UsersQuery
 
-
-@strawberry.type
-class Root(
-    ChaptersRoot,
-    MangaRoot,
-    UsersRoot,
-):
-    pass
-
-
-@strawberry.type
-class Mutation(
-    manga.manga.mutations.Mutation,
-):
-    pass
+Query = merge_types("Root", (ChaptersQuery, MangaQuery, UsersQuery))
+Mutation = merge_types("Mutation", (MangaMutation,))

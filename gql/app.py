@@ -6,7 +6,7 @@ from starlette.responses import Response
 from starlette.websockets import WebSocket
 from strawberry.asgi import GraphQL
 
-from gql.root import Root, Mutation
+from gql.root import Query, Mutation
 from gql.users.context import create_current_user_context
 from . import context
 from .extensions import DataLoadersExtension
@@ -26,5 +26,5 @@ class MyGraphQL(GraphQL):
         )
 
 
-schema = strawberry.Schema(query=Root, mutation=Mutation, extensions=[DataLoadersExtension])
+schema = strawberry.Schema(query=Query, mutation=Mutation, extensions=[DataLoadersExtension])
 graphql_app = MyGraphQL(schema=schema)

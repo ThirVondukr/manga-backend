@@ -1,1 +1,1 @@
-from . import root, loaders, mutations
+from . import query, loaders, mutations

@@ -4,7 +4,7 @@ from . import resolvers
 
 
 @strawberry.type
-class MangaRoot:
+class MangaQuery:
     get_manga_by_id = strawberry.field(resolvers.get_manga_by_id)
     get_manga_by_title_slug = strawberry.field(resolvers.get_manga_by_title_slug)
 
