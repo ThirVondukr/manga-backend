@@ -5,12 +5,11 @@ from uuid import UUID
 
 import strawberry
 from sqlalchemy import select, func
-from strawberry.types import Info
 
 from db.dependencies import get_session
 from db.models.manga import MangaLike, Manga
 from db.models.users import User
-from gql._loaders import Loaders
+from gql.context import Info
 from gql.manga.chapters.resolvers import get_user_chapters_feed
 from gql.manga.chapters.types import MangaChapterType
 from gql.manga.manga.types import MangaType
@@ -32,8 +31,8 @@ class UserType:
     joined_at: datetime
 
     @strawberry.field
-    def liked_manga_count(self, info: Info) -> int:
-        return cast(int, info.context[Loaders.user_liked_manga_count].load(self.id))
+    async def liked_manga_count(self, info: Info) -> int:
+        return await info.context.loaders.user_liked_manga_count.load(self.id)
 
     @classmethod
     def from_orm(cls, user: User) -> "UserType":
