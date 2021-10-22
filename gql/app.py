@@ -26,9 +26,5 @@ class MyGraphQL(GraphQL):
         )
 
 
-schema = strawberry.Schema(
-    query=Root,
-    mutation=Mutation,
-    extensions=[DataLoadersExtension]
-)
+schema = strawberry.Schema(query=Root, mutation=Mutation, extensions=[DataLoadersExtension])
 graphql_app = MyGraphQL(schema=schema)
