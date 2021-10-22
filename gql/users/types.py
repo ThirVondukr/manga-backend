@@ -15,7 +15,10 @@ from gql.manga.chapters.resolvers import get_user_chapters_feed
 from gql.manga.chapters.types import MangaChapterType
 from gql.manga.manga.types import MangaType
 from gql.pagination.types import (
-    PaginationInput, PaginationInputPydantic, Connection, PagePagination,
+    PaginationInput,
+    PaginationInputPydantic,
+    Connection,
+    PagePagination,
     PagePaginationPageInfo,
 )
 
@@ -30,9 +33,7 @@ class UserType:
 
     @strawberry.field
     def liked_manga_count(self, info: Info) -> int:
-        return cast(
-            int, info.context[Loaders.user_liked_manga_count].load(self.id)
-        )
+        return cast(int, info.context[Loaders.user_liked_manga_count].load(self.id))
 
     @classmethod
     def from_orm(cls, user: User) -> "UserType":
@@ -54,12 +55,7 @@ class UserType:
     async def followed_manga(self, pagination: PaginationInput) -> PagePagination[MangaType]:
         pagination_pydantic: PaginationInputPydantic = pagination.to_pydantic()
 
-        manga_query = (
-            select(Manga)
-                .join(MangaLike)
-                .filter(MangaLike.user_id == self.id)
-                .order_by(Manga.title_slug)
-        )
+        manga_query = select(Manga).join(MangaLike).filter(MangaLike.user_id == self.id).order_by(Manga.title_slug)
         likes_count_query = select(func.count(MangaLike.manga_id)).filter(MangaLike.user_id == self.id)
         manga_query = pagination_pydantic.apply_to_query(manga_query)
         async with get_session() as session:

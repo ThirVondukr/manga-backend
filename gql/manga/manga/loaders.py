@@ -19,11 +19,7 @@ async def load_manga(manga_ids: List[UUID]) -> List[Optional[Manga]]:
 
 
 async def manga_likes(manga_ids: List[UUID]) -> List[int]:
-    query = (
-        select(Manga)
-        .filter(Manga.id.in_(manga_ids))
-        .options(load_only(Manga.id, Manga.likes_count))
-    )
+    query = select(Manga).filter(Manga.id.in_(manga_ids)).options(load_only(Manga.id, Manga.likes_count))
 
     async with get_session() as session:
         manga: Iterable[Manga] = await session.scalars(query)

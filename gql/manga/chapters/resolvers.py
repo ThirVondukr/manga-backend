@@ -65,7 +65,8 @@ async def get_user_chapters_feed(
             Edge(
                 node=chapter,
                 cursor=str(chapter.published_at),
-            ) for chapter in chapter_types
+            )
+            for chapter in chapter_types
         ],
         page_info=PageInfo(
             end_cursor=str(chapter_types[-1].published_at),

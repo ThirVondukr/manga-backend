@@ -19,14 +19,10 @@ async def get_user_from_request(request: Request) -> Optional[User]:
     token = request.headers["Authorization"].replace("Bearer ", "", 1)
 
     try:
-        payload = jwt.decode(
-            token, auth_settings.secret_key, algorithms=[auth_settings.algorithm]
-        )
+        payload = jwt.decode(token, auth_settings.secret_key, algorithms=[auth_settings.algorithm])
         user_id = payload.get("sub", None)
         async with get_session() as session:
-            result: Result = await session.execute(
-                select(User).filter(User.id == user_id).limit(1)
-            )
+            result: Result = await session.execute(select(User).filter(User.id == user_id).limit(1))
         user = result.scalar_one_or_none()
         return user
     except JWTError:

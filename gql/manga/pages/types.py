@@ -8,4 +8,3 @@ class MangaPageType:
     id: int
     image_url: str
     chapter_id: UUID
-

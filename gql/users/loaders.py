@@ -27,9 +27,7 @@ async def manga_is_liked_by_viewer(manga_ids: List[UUID]) -> List[bool]:
     if user is None:
         return [False for _ in manga_ids]
 
-    query = select(MangaLike).filter(
-        MangaLike.user_id == user.id, MangaLike.manga_id.in_(manga_ids)
-    )
+    query = select(MangaLike).filter(MangaLike.user_id == user.id, MangaLike.manga_id.in_(manga_ids))
     async with get_session() as session:
         result: Result = await session.execute(query)
 

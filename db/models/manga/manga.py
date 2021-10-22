@@ -39,8 +39,6 @@ class Manga(Base, DateTimeMixin):
     )
 
     likes_count: Mapped[int] = column_property(
-        select(func.count(MangaLike.manga_id))
-        .filter(MangaLike.manga_id == id)
-        .scalar_subquery(),
+        select(func.count(MangaLike.manga_id)).filter(MangaLike.manga_id == id).scalar_subquery(),
         deferred=True,
     )

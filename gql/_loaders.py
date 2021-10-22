@@ -14,5 +14,3 @@ class Loaders(enum.Enum):
     user_liked_manga_count = enum.auto()
 
     chapter_pages = enum.auto()
-
-

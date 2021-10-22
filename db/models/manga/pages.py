@@ -20,7 +20,5 @@ class MangaPage(Base):
     number: Mapped[int] = Column(Integer, nullable=False)
     image_url: Mapped[str] = Column(String, nullable=False)
 
-    chapter_id: Mapped[uuid.UUID] = Column(
-        UUID(as_uuid=True), ForeignKey("manga__chapters.id"), nullable=False
-    )
+    chapter_id: Mapped[uuid.UUID] = Column(UUID(as_uuid=True), ForeignKey("manga__chapters.id"), nullable=False)
     chapter: Mapped[MangaChapter] = relationship("MangaChapter", back_populates="pages")

@@ -40,9 +40,7 @@ async def get_manga_chapters(
         .filter(MangaChapter.manga_id == manga_id)
     )
     chapters_query = pagination_pydantic.apply_to_query(chapters_query)
-    total_count_query = select(count(MangaChapter.id)).filter(
-        MangaChapter.manga_id == manga_id
-    )
+    total_count_query = select(count(MangaChapter.id)).filter(MangaChapter.manga_id == manga_id)
 
     async with get_session() as session:
         chapters: Result = await session.execute(chapters_query)
@@ -51,8 +49,7 @@ async def get_manga_chapters(
     return MangaChaptersPaginationResponse(
         items=chapters.scalars().all(),
         page_info=PagePaginationPageInfo(
-            has_next=total_count
-            > pagination_pydantic.page * pagination_pydantic.page_size,
+            has_next=total_count > pagination_pydantic.page * pagination_pydantic.page_size,
             page=pagination_pydantic.page,
             page_size=pagination_pydantic.page_size,
             total_pages=math.ceil(total_count / pagination_pydantic.page_size),

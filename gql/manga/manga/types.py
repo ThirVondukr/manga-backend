@@ -78,7 +78,5 @@ class MangaType:
         )
 
     @strawberry.field
-    async def chapters(
-        self, pagination: PaginationInput
-    ) -> MangaChaptersPaginationResponse:
+    async def chapters(self, pagination: PaginationInput) -> MangaChaptersPaginationResponse:
         return await get_manga_chapters(cast(Manga, self).id, pagination)

@@ -42,5 +42,5 @@ def _create_data_loaders():
         Loaders.manga_writers: DataLoader(authors.loaders.manga_writers),
         Loaders.manga_is_liked_by_viewer: DataLoader(users.loaders.manga_is_liked_by_viewer),
         Loaders.user_liked_manga_count: DataLoader(users.loaders.user_liked_manga_count),
-        Loaders.chapter_pages: DataLoader(pages.loaders.load_chapter_pages)
+        Loaders.chapter_pages: DataLoader(pages.loaders.load_chapter_pages),
     }

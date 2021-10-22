@@ -43,9 +43,7 @@ class UserService:
         user = User(
             username=user_model.username,
             email=user_model.email,
-            password_hash=self._hash_service.hash(
-                user_model.password.get_secret_value()
-            ),
+            password_hash=self._hash_service.hash(user_model.password.get_secret_value()),
         )
         self._session.add(user)
         await self._session.commit()

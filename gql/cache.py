@@ -18,4 +18,3 @@ class AsyncCache:
 
     def __await__(self):
         return self().__await__()
-

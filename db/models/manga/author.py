@@ -22,9 +22,7 @@ class AuthorRelationshipType(enum.Enum):
 class Author(Base):
     __tablename__ = "manga__author"
 
-    id: Mapped[uuid.UUID] = Column(
-        UUID(as_uuid=True), default=uuid.uuid4, nullable=False, primary_key=True
-    )
+    id: Mapped[uuid.UUID] = Column(UUID(as_uuid=True), default=uuid.uuid4, nullable=False, primary_key=True)
     name: Mapped[str] = Column(String, nullable=False)
 
 

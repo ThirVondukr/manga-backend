@@ -27,16 +27,10 @@ def _make_load_fn(author_type: AuthorRelationshipType):
         query = _get_authors_query(manga_ids, type_=author_type)
         async with get_session() as session:
             author_relationships_result = await session.execute(query)
-        author_relationships: Iterable[
-            AuthorRelationship
-        ] = author_relationships_result.scalars()
-        author_relationships_by_manga_id: dict[UUID, list[AuthorType]] = defaultdict(
-            list
-        )
+        author_relationships: Iterable[AuthorRelationship] = author_relationships_result.scalars()
+        author_relationships_by_manga_id: dict[UUID, list[AuthorType]] = defaultdict(list)
         for ar in author_relationships:
-            author_relationships_by_manga_id[ar.manga_id].append(
-                AuthorType.from_orm(ar.author)
-            )
+            author_relationships_by_manga_id[ar.manga_id].append(AuthorType.from_orm(ar.author))
 
         return [author_relationships_by_manga_id[manga_id] for manga_id in manga_ids]
 

@@ -13,13 +13,9 @@ async def current_user(
     token: str = Depends(oauth2_scheme),
     user_service: UserService = Depends(),
 ) -> User:
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
-    )
+    credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     try:
-        payload = jwt.decode(
-            token, settings.secret_key, algorithms=[settings.algorithm]
-        )
+        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
         user_id = payload.get("sub", None)
         if not user_id:
             raise credentials_exception
