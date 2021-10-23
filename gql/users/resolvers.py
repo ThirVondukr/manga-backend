@@ -5,12 +5,12 @@ from sqlalchemy import select
 
 from db.dependencies import get_session
 from db.models.users import User
-from gql.users.context import get_current_user_from_context
+from gql.context import Info
 from gql.users.types import UserType
 
 
-async def get_viewer() -> Optional[UserType]:
-    user = await get_current_user_from_context()
+async def get_viewer(info: Info) -> Optional[UserType]:
+    user = await info.context.user()
     return UserType.maybe_from_orm(user)
 
 

@@ -9,8 +9,6 @@ from db.dependencies import get_session
 from db.models.users import User
 from settings import settings as auth_settings
 
-_CURRENT_USER_KEY = "Auth_CurrentUser"
-
 
 async def get_user_from_request(request: Request) -> Optional[User]:
     if "Authorization" not in request.headers:

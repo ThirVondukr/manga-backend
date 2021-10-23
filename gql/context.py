@@ -1,5 +1,6 @@
 import dataclasses
-from typing import Optional, List, Union
+from contextvars import ContextVar
+from typing import Optional, List, Union, Callable, Awaitable
 from uuid import UUID
 
 from starlette.requests import Request
@@ -9,6 +10,7 @@ from strawberry.dataloader import DataLoader
 from strawberry.types import Info as StrawberryInfo
 
 from db.models.manga import Manga, MangaPage, MangaInfo, MangaArt, Author
+from db.models.users import User
 
 
 @dataclasses.dataclass
@@ -30,7 +32,11 @@ class Context:
     request: Union[Request, WebSocket]
     response: Optional[Response]
     loaders: Loaders
+    user: Callable[..., Awaitable[Optional[User]]]
 
 
 class Info(StrawberryInfo[Context, None]):
     pass
+
+
+context_var: ContextVar[Context] = ContextVar("strawberry_context")

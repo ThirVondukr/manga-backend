@@ -9,7 +9,6 @@ from db.dependencies import get_session
 from db.models.manga import Manga, MangaLike
 from gql.exceptions import NotAuthenticated, NotFound
 from gql.manga.manga.types import MangaType
-from gql.users.context import get_current_user_from_context
 
 
 @strawberry.type
@@ -27,7 +26,7 @@ LikeMangaResponse = strawberry.union(
 class MangaMutation:
     @strawberry.mutation
     async def set_manga_liked(self, info: Info, manga_id: UUID, liked: bool = True) -> LikeMangaResponse:
-        user = await get_current_user_from_context()
+        user = await info.context.user()
         if user is None:
             return NotAuthenticated()
 

@@ -21,3 +21,4 @@ class DataLoadersExtension(Extension):
             user_liked_manga_count=DataLoader(users.loaders.user_liked_manga_count),
             chapter_pages=DataLoader(pages.loaders.load_chapter_pages),
         )
+        return None
