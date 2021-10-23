@@ -16,8 +16,8 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 alembic = "^1.6.5"
 python-slugify = "^5.0.2"
 pydantic = {extras = ["email", "dotenv"], version = "^1.8.2"}
-strawberry-graphql = "^0.83.4"
-SQLAlchemy = {extras = ["mypy"], version = "^1.4.25"}
+strawberry-graphql = "^0.84.4"
+SQLAlchemy = {extras = ["mypy"], version = "^1.4.26"}
 
 [tool.poetry.dev-dependencies]
 black = "^21.7b0"
