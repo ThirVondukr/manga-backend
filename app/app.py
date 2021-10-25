@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from starlette.responses import JSONResponse
+
+from modules.exceptions import APIException
 
 
 def touch_models():
@@ -28,5 +31,9 @@ def create_app() -> FastAPI:
     app.mount("/static", StaticFiles(directory="static"), name="static")
 
     app.mount("/graphql", graphql_app)
+
+    @app.exception_handler(APIException)
+    async def handle_api_exception(request, exc: APIException):
+        return JSONResponse({"code": exc.code, "detail": exc.detail}, status_code=exc.status_code)
 
     return app

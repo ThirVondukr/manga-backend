@@ -1,25 +1,24 @@
 from uuid import UUID
 
-from pydantic import EmailStr, SecretStr
+from pydantic import EmailStr, SecretStr, constr, Field
 
 from app.schema import SchemaBase
 
 
-class _UserSchemaBase(SchemaBase):
-    username: str
-    email: EmailStr
-
-
-class CreateUserSchema(_UserSchemaBase):
+class CreateUserSchema(SchemaBase):
     class Config:
         title = "CreateUser"
 
-    password: SecretStr
+    username: constr(min_length=5, max_length=24)
+    email: EmailStr
+    password: SecretStr = Field(min_length=8, max_length=48)
 
 
-class UserSchema(_UserSchemaBase):
+class UserSchema(SchemaBase):
     class Config:
         title = "User"
 
     id: UUID
+    username: str
+    email: EmailStr
     avatar_url: str
