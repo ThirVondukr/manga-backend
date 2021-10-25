@@ -4,7 +4,7 @@ from db.models.manga import Manga
 
 
 @pytest.mark.asyncio
-async def test_can_retrieve_manga_by_id(gql_schema, session, http_client):
+async def test_can_retrieve_manga_by_id(session, http_client):
     manga = Manga(title="title", title_slug="title")
     session.add(manga)
     await session.commit()
