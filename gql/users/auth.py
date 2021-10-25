@@ -7,7 +7,7 @@ from starlette.requests import Request
 
 from db.dependencies import get_session
 from db.models.users import User
-from settings import settings as auth_settings
+from settings import auth as auth_settings
 
 
 async def get_user_from_request(request: Request) -> Optional[User]:

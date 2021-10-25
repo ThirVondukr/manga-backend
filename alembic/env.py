@@ -16,7 +16,7 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
-config.set_main_option("sqlalchemy.url", settings.database_settings.database_url)
+config.set_main_option("sqlalchemy.url", settings.database.database_url)
 
 app.touch_models()
 

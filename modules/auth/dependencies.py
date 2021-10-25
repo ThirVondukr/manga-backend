@@ -4,7 +4,7 @@ from jose import jwt, JWTError
 
 from db.models.users import User
 from modules.users.services import UserService
-from settings import settings
+from settings import auth
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 
@@ -15,7 +15,7 @@ async def current_user(
 ) -> User:
     credentials_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
     try:
-        payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+        payload = jwt.decode(token, auth.secret_key, algorithms=[auth.algorithm])
         user_id = payload.get("sub", None)
         if not user_id:
             raise credentials_exception
