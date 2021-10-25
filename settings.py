@@ -47,6 +47,7 @@ class AuthSettings(BaseSettings):
     argon2_rounds: int
     argon2_memory_cost: int
 
+
 database = DatabaseSettings(_env_file=".env")
 test_database = TestDatabaseSettings(_env_file=".env")
 auth = AuthSettings(_env_file=".env")
