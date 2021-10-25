@@ -25,7 +25,7 @@ def create_token(user: User) -> str:
 
 
 @auth_router.post(
-    "/token",
+    "/token/",
     response_model=schema.TokenSchema,
 )
 async def login(

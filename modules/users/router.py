@@ -9,7 +9,7 @@ users_router = APIRouter()
 
 
 @users_router.get(
-    "/me",
+    "/me/",
     response_model=schema.UserSchema,
 )
 async def me(user: User = Depends(current_user)):
@@ -17,7 +17,7 @@ async def me(user: User = Depends(current_user)):
 
 
 @users_router.post(
-    "",
+    "/",
     response_model=schema.UserSchema,
     status_code=status.HTTP_201_CREATED,
 )

@@ -9,5 +9,5 @@ async def create_user_response(http_client) -> httpx.Response:
         "password": "password",
         "email": "test@example.com",
     }
-    response = await http_client.post("/api/users", json=body)
+    response = await http_client.post("/api/users/", json=body)
     return response
