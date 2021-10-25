@@ -24,6 +24,7 @@ def event_loop():
     """I had some problems with event loop closing after first test, so hopefully this works"""
     loop = asyncio.get_event_loop()
     yield loop
+    loop.run_until_complete(loop.shutdown_asyncgens())
     loop.close()
 
 
