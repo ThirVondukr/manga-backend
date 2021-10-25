@@ -5,7 +5,7 @@ from pydantic import EmailStr, SecretStr, constr, Field
 from app.schema import SchemaBase
 
 
-class CreateUserSchema(SchemaBase):
+class UserCreateSchema(SchemaBase):
     class Config:
         title = "CreateUser"
 

@@ -10,7 +10,7 @@ from db.models import users
 from db.models.users import User
 from modules.auth.services import HashingService
 from . import exceptions
-from .schema import CreateUserSchema
+from .schema import UserCreateSchema
 
 
 class UserService:
@@ -35,7 +35,7 @@ class UserService:
     async def get_by_username(self, username: str) -> Optional[User]:
         return await self._get_user(User.username == username)
 
-    async def _create(self, user_model: CreateUserSchema) -> User:
+    async def _create(self, user_model: UserCreateSchema) -> User:
         user = User(
             username=user_model.username,
             email=user_model.email,
@@ -46,7 +46,7 @@ class UserService:
         await self._session.refresh(user)
         return user
 
-    async def create(self, user_model: CreateUserSchema) -> User:
+    async def create(self, user_model: UserCreateSchema) -> User:
         duplicate_username = await self._get_user(User.username == user_model.username)
         if duplicate_username:
             raise exceptions.UsernameIsTakenError

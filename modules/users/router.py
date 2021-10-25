@@ -22,7 +22,7 @@ async def me(user: User = Depends(current_user)):
     status_code=status.HTTP_201_CREATED,
 )
 async def create_user(
-    user: schema.CreateUserSchema,
+    user: schema.UserCreateSchema,
     user_service: UserService = Depends(),
 ):
     return await user_service.create(user_model=user)
