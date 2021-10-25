@@ -3,12 +3,12 @@ from typing import AsyncGenerator
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.base import Session
+import db.base
 
 
 @asynccontextmanager
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    async with Session() as session:
+async def _get_session() -> AsyncGenerator[AsyncSession, None]:
+    async with db.base.Session() as session:
         try:
             yield session
         except Exception:
@@ -16,6 +16,12 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
             raise
 
 
+@asynccontextmanager
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    async with _get_session() as session:
+        yield session
+
+
 async def get_session_dependency() -> AsyncGenerator[AsyncSession, None]:
-    async with get_session() as session:
+    async with _get_session() as session:
         yield session
