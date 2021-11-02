@@ -28,10 +28,16 @@ async def _seed_preset_manga_chapters(
                 title = s[1]
 
             published_at = _fake.date_time_this_month()
-
+            chapter_number = chapter_directory.stem.split(" ")[0]
+            try:
+                number, number_extra = chapter_number.split("-")
+                number, number_extra = int(number), int(number_extra)
+            except ValueError:
+                number, number_extra = int(chapter_number), None
             chapter = MangaChapter(
                 language="en",
-                number=chapter_directory.stem.split(" ")[0],
+                number=number,
+                number_extra=number_extra,
                 title=title,
                 published_at=published_at,
             )
@@ -51,7 +57,8 @@ async def _seed_manga_chapters(
         published_at = _fake.date_time_this_month()
         chapter = MangaChapter(
             language="en",
-            number=str(chapter_number),
+            number=chapter_number,
+            number_extra=None,
             published_at=published_at,
             manga=manga,
         )
