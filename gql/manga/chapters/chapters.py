@@ -34,8 +34,8 @@ async def get_manga_chapters(
     chapters_query: Select = (
         select(MangaChapter)
         .order_by(
-            cast((func.substring(MangaChapter.number, "^[0-9]+")), Integer).desc(),
             MangaChapter.number.desc(),
+            MangaChapter.number_extra.desc(),
         )
         .filter(MangaChapter.manga_id == manga_id)
     )
