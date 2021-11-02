@@ -1,4 +1,3 @@
-import typing
 from typing import cast, List, Optional
 from uuid import UUID
 
@@ -40,23 +39,28 @@ class MangaType:
 
     @strawberry.field
     async def artists(self, info: Info) -> List[AuthorType]:
-        return await info.context.loaders.manga_artists.load(self.id)
+        artists = await info.context.loaders.manga_artists.load(self.id)
+        return AuthorType.from_orm_list(artists)
 
     @strawberry.field
     async def writers(self, info: Info) -> List[AuthorType]:
-        return await info.context.loaders.manga_writers.load(self.id)
+        writers = await info.context.loaders.manga_writers.load(self.id)
+        return AuthorType.from_orm_list(writers)
 
     @strawberry.field
     async def arts(self, info: Info) -> List[MangaArtType]:
-        return await info.context.loaders.manga_arts.load(self.id)
+        arts = await info.context.loaders.manga_arts.load(self.id)
+        return MangaArtType.from_orm_list(arts)
 
     @strawberry.field
     async def cover(self, info: Info) -> Optional[MangaArtType]:
-        return await info.context.loaders.manga_cover.load(self.id)
+        manga_art = await info.context.loaders.manga_cover.load(self.id)
+        return MangaArtType.from_orm_optional(manga_art)
 
     @strawberry.field
     async def infos(self, info: Info) -> List[MangaInfoType]:
-        return await info.context.loaders.manga_infos.load(self.id)
+        infos = await info.context.loaders.manga_infos.load(self.id)
+        return MangaInfoType.from_orm_list(infos)
 
     @strawberry.field
     async def chapters(self, pagination: PaginationInput) -> MangaChaptersPaginationResponse:

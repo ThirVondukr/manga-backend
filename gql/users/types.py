@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import math
 from datetime import datetime
 from typing import cast, Iterable, Optional
@@ -13,6 +15,7 @@ from gql.context import Info
 from gql.manga.chapters.resolvers import get_user_chapters_feed
 from gql.manga.chapters.types import MangaChapterType
 from gql.manga.manga.types import MangaType
+from gql.mixins import OrmTypeMixin
 from gql.pagination.types import (
     PaginationInput,
     PaginationInputPydantic,
@@ -23,7 +26,7 @@ from gql.pagination.types import (
 
 
 @strawberry.type(name="User")
-class UserType:
+class UserType(OrmTypeMixin):
     id: UUID
     username: str
     avatar_url: str
@@ -35,7 +38,7 @@ class UserType:
         return await info.context.loaders.user_liked_manga_count.load(self.id)
 
     @classmethod
-    def from_orm(cls, user: User) -> "UserType":
+    def from_orm(cls, user: User) -> UserType:
         return cls(
             id=user.id,
             username=user.username,
@@ -43,12 +46,6 @@ class UserType:
             email=user.email,
             joined_at=user.created_at,
         )
-
-    @classmethod
-    def maybe_from_orm(cls, user: Optional[User]) -> Optional["UserType"]:
-        if user is None:
-            return None
-        return cls.from_orm(user)
 
     @strawberry.field
     async def followed_manga(self, pagination: PaginationInput) -> PagePagination[MangaType]:

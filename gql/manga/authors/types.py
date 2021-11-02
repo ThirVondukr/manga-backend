@@ -3,10 +3,11 @@ from uuid import UUID
 import strawberry
 
 from db.models.manga import Author
+from gql.mixins import OrmTypeMixin
 
 
 @strawberry.type(name="Author")
-class AuthorType:
+class AuthorType(OrmTypeMixin):
     id: UUID
     name: str
 

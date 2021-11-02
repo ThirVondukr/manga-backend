@@ -11,7 +11,7 @@ from gql.users.types import UserType
 
 async def get_viewer(info: Info) -> Optional[UserType]:
     user = await info.context.user()
-    return UserType.maybe_from_orm(user)
+    return UserType.from_orm_optional(user)
 
 
 async def get_user_by_id(user_id: UUID) -> Optional[UserType]:
@@ -19,7 +19,7 @@ async def get_user_by_id(user_id: UUID) -> Optional[UserType]:
     async with get_session() as session:
         user: Optional[User] = (await session.execute(query)).scalar_one_or_none()
 
-    return UserType.maybe_from_orm(user)
+    return UserType.from_orm_optional(user)
 
 
 async def get_user_by_username(username: str) -> Optional[UserType]:
@@ -27,4 +27,4 @@ async def get_user_by_username(username: str) -> Optional[UserType]:
     async with get_session() as session:
         user: Optional[User] = (await session.execute(query)).scalar_one_or_none()
 
-    return UserType.maybe_from_orm(user)
+    return UserType.from_orm_optional(user)

@@ -20,7 +20,8 @@ class MangaChapterType:
     created_at: datetime.datetime
     updated_at: datetime.datetime
     language: str
-    number: str
+    number: int
+    number_extra: Optional[int]
     title: Optional[str]
     published_at: datetime.datetime
 
@@ -33,7 +34,7 @@ class MangaChapterType:
     @strawberry.field
     async def pages(self, info: Info) -> List[MangaPageType]:
         pages = await info.context.loaders.chapter_pages.load(self.id)
-        return pages
+        return [MangaPageType.from_orm(page) for page in pages]
 
     @classmethod
     def from_orm(cls, model: MangaChapter) -> MangaChapterType:
@@ -43,6 +44,7 @@ class MangaChapterType:
             updated_at=model.updated_at,
             language=model.language,
             number=model.number,
+            number_extra=model.number_extra,
             title=model.title,
             published_at=model.published_at,
             manga_id=model.manga_id,
