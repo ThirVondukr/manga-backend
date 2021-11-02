@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 
-from sqlalchemy import Column, String, ForeignKey, DateTime
+from sqlalchemy import Column, String, ForeignKey, DateTime, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship, Mapped
 
@@ -24,8 +24,10 @@ class MangaChapter(Base, DateTimeMixin):
         nullable=False,
     )
 
+    number: Mapped[int] = Column(Integer, nullable=False)
+    number_extra: Mapped[Optional[int]] = Column(Integer)
+
     language: Mapped[str] = Column(String(length=2), nullable=False)
-    number: Mapped[str] = Column(String(length=255), nullable=False)
     title: Mapped[Optional[str]] = Column(String(length=255), nullable=True)
     published_at: Mapped[datetime] = Column(DateTime(timezone=True), nullable=False)
 
