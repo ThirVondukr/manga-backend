@@ -9,7 +9,11 @@ from db.models.manga import MangaPage
 
 
 async def load_chapter_pages(chapter_ids: List[UUID]) -> List[List[MangaPage]]:
-    query = select(MangaPage).filter(MangaPage.chapter_id.in_(chapter_ids))
+    query = (
+        select(MangaPage)
+        .filter(MangaPage.chapter_id.in_(chapter_ids))
+        .order_by(MangaPage.number.asc())
+    )
     async with get_session() as session:
         pages: List[MangaPage] = (await session.scalars(query)).all()
     pages_by_chapter_id = defaultdict(list)
