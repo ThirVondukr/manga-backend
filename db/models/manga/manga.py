@@ -16,14 +16,14 @@ from db.models.users import User
 class Manga(Base, DateTimeMixin):
     __tablename__ = "manga__manga"
 
-    id: uuid.UUID = Column(
+    id: Mapped[uuid.UUID] = Column(
         UUID(as_uuid=True),
         default=uuid.uuid4,
         primary_key=True,
         nullable=False,
     )
-    title: str = Column(String(255), nullable=False, unique=True)
-    title_slug: str = Column(String(255), nullable=False, unique=True)
+    title: Mapped[str] = Column(String(255), nullable=False, unique=True)
+    title_slug: Mapped[str] = Column(String(255), nullable=False, unique=True)
 
     infos = relationship(MangaInfo, uselist=True)
     arts = relationship(MangaArt, uselist=True)
