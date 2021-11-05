@@ -1,6 +1,6 @@
 import collections
 from operator import attrgetter
-from typing import TypeVar, Generic, Callable, Iterable, Optional
+from typing import TypeVar, Generic, Callable, Iterable
 
 from mypy.api import List
 from sqlalchemy.orm import Mapped
