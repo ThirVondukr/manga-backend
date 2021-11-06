@@ -43,10 +43,6 @@ class AuthSettings(BaseSettings):
     algorithm: str
     token_lifetime_min: int
 
-    argon2_type: str
-    argon2_rounds: int
-    argon2_memory_cost: int
-
 
 database = DatabaseSettings(_env_file=".env")
 test_database = TestDatabaseSettings(_env_file=".env")
