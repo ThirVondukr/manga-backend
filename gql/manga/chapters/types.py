@@ -29,6 +29,7 @@ class MangaChapterType(OrmTypeMixin):
     published_at: datetime.datetime
 
     manga_id: UUID
+    instance: strawberry.Private[str]
 
     @strawberry.field
     async def all_chapters(self) -> List[MangaChapterType]:
