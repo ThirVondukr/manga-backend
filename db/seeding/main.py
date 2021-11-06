@@ -21,9 +21,9 @@ async def create_user():
         user = User(
             id=UUID("f75c6922-2d66-4480-b9c4-df325712c8a9"),
             username="Doctor",
-            password_hash=hash_service.hash("3212"),
             email="test@example.com",
         )
+        hash_service.update_user_password(user, "3212")
         session.add(user)
         await session.commit()
 

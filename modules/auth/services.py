@@ -1,19 +1,19 @@
 from passlib.context import CryptContext
 
-import settings
+from db.models.users import User
 
 
 class HashingService:
     def __init__(self):
         self.context = CryptContext(
             schemes=["argon2"],
-            argon2__type=settings.auth.argon2_type,
-            argon2__rounds=settings.auth.argon2_rounds,
-            argon2__memory_cost=settings.auth.argon2_memory_cost,
         )
 
-    def hash(self, secret: str) -> str:
-        return self.context.hash(secret)
+    def verify_user_password(self, user: User, password: str) -> bool:
+        return self.context.verify(
+            password,
+            user.password_hash,
+        )
 
-    def verify(self, secret: str, hash_: str) -> bool:
-        return self.context.verify(secret, hash_)
+    def update_user_password(self, user: User, password: str) -> None:
+        user.password_hash = self.context.hash(password)

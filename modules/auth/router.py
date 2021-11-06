@@ -37,7 +37,7 @@ async def login(
     if user is None:
         raise exceptions.InvalidCredentialsError
 
-    if not hash_service.verify(form_data.password, user.password_hash):
+    if not hash_service.verify_user_password(user=user, password=form_data.password):
         raise exceptions.InvalidCredentialsError
 
     return schema.TokenSchema(
