@@ -21,7 +21,7 @@ async def login(
     if user is None:
         raise exceptions.InvalidCredentialsError
 
-    if not auth_service.verify_user_password(user=user, password=form_data.password):
+    if not await auth_service.verify_user_password(user=user, password=form_data.password):
         raise exceptions.InvalidCredentialsError
 
     return auth_service.create_token(user)
