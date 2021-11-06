@@ -1,6 +1,6 @@
 import collections
 from operator import attrgetter
-from typing import TypeVar, Generic, Callable, Iterable
+from typing import TypeVar, Generic, Callable, Iterable, Any
 
 from mypy.api import List
 from sqlalchemy.orm import Mapped
@@ -12,7 +12,7 @@ TId = TypeVar("TId")
 TModel = TypeVar("TModel")
 
 IdGetter = Callable[[TModel], TId]
-ModelGetter = Callable[..., TModel]
+ModelGetter = Callable[[Any], TModel]
 
 
 class Loader(Generic[TId, TModel]):

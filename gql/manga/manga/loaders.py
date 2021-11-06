@@ -1,4 +1,5 @@
 from operator import attrgetter
+from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import select
@@ -7,7 +8,7 @@ from sqlalchemy.orm import load_only
 from db.models.manga import Manga
 from gql.loaders import ModelLoader
 
-load_manga: ModelLoader[UUID, Manga] = ModelLoader(
+load_manga: ModelLoader[UUID, Optional[Manga]] = ModelLoader(
     select(Manga),
     id_attr=Manga.id,
 )
