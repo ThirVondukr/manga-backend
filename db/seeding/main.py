@@ -5,7 +5,7 @@ from db.base import Base
 from db.dependencies import get_session
 from db.models.users import User
 from db.seeding import manga, chapters
-from modules.auth.services import HashingService
+from modules.auth.services import AuthService
 
 
 async def clear_db():
@@ -17,13 +17,13 @@ async def clear_db():
 
 async def create_user():
     async with get_session() as session:
-        hash_service = HashingService()
+        auth_service = AuthService()
         user = User(
             id=UUID("f75c6922-2d66-4480-b9c4-df325712c8a9"),
             username="Doctor",
             email="test@example.com",
         )
-        hash_service.update_user_password(user, "3212")
+        auth_service.update_user_password(user, "3212")
         session.add(user)
         await session.commit()
 

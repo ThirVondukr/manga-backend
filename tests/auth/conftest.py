@@ -4,12 +4,12 @@ from typing import ContextManager, Callable
 import pytest
 
 from db.models.users import User
-from modules.auth.services import HashingService
+from modules.auth.services import AuthService
 
 
 @pytest.fixture(scope="module")
-def hash_service() -> HashingService:
-    return HashingService()
+def auth_service() -> AuthService:
+    return AuthService()
 
 
 @pytest.fixture(scope="module")

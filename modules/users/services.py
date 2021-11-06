@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from db.dependencies import get_session_dependency
 from db.models import users
 from db.models.users import User
-from modules.auth.services import HashingService
+from modules.auth.services import AuthService
 from . import exceptions
 from .schema import UserCreateSchema
 
@@ -17,10 +17,10 @@ class UserService:
     def __init__(
         self,
         session: AsyncSession = Depends(get_session_dependency),
-        hash_service: HashingService = Depends(),
+        auth_service: AuthService = Depends(),
     ):
         self._session = session
-        self._hash_service = hash_service
+        self._auth_service = auth_service
 
     async def _get_user(self, clause) -> Optional[User]:
         query = select(User).filter(clause)
@@ -40,7 +40,7 @@ class UserService:
             username=user_model.username,
             email=user_model.email,
         )
-        self._hash_service.update_user_password(
+        self._auth_service.update_user_password(
             user=user,
             password=user_model.password.get_secret_value()
         )
