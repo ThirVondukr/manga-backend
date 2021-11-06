@@ -1,4 +1,4 @@
-from typing import Generic, TypeVar, List, Optional
+from typing import Generic, TypeVar, List, Optional, Iterable
 
 TModel = TypeVar("TModel")
 TType = TypeVar("TType")
@@ -16,5 +16,5 @@ class OrmTypeMixin(Generic[TType, TModel]):
         return cls.from_orm(model)
 
     @classmethod
-    def from_orm_list(cls, models: List[TModel]) -> List[TType]:
+    def from_orm_list(cls, models: Iterable[TModel]) -> List[TType]:
         return [cls.from_orm(model) for model in models]
