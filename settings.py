@@ -29,7 +29,9 @@ class TestDatabaseSettings(BaseSettings):
     host: str
 
     def get_sync_database_url(self, database_name: str) -> str:
-        return f"{self.sync_driver}://{self.username}:{self.password}@{self.host}/{database_name}"
+        return (
+            f"{self.sync_driver}://{self.username}:{self.password}@{self.host}/{database_name}"
+        )
 
     def get_database_url(self, database_name: str) -> str:
         return f"{self.driver}://{self.username}:{self.password}@{self.host}/{database_name}"

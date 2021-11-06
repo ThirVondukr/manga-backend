@@ -35,7 +35,12 @@ async def test_can_verify_hashed_password(auth_service, get_user, password):
 @hypothesis.given(password=text(), another_password=text())
 @pytest.mark.asyncio
 @pytest.mark.slow
-async def test_cant_verify_another_password(auth_service, get_user, password: str, another_password: str):
+async def test_cant_verify_another_password(
+    auth_service,
+    get_user,
+    password: str,
+    another_password: str,
+):
     hypothesis.assume(password != another_password)
 
     with get_user() as user:

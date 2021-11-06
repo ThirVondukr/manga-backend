@@ -12,7 +12,9 @@ async def _get_none() -> None:
     return None
 
 
-def create_user_context(request: Union[Request, WebSocket]) -> Callable[..., Awaitable[Optional[User]]]:
+def create_user_context(
+    request: Union[Request, WebSocket]
+) -> Callable[..., Awaitable[Optional[User]]]:
     if isinstance(request, Request):
         return AsyncCache(lambda: get_user_from_request(request=request))
     return AsyncCache(_get_none)

@@ -31,6 +31,10 @@ class MangaChapter(Base, DateTimeMixin):
     title: Mapped[Optional[str]] = Column(String(length=255), nullable=True)
     published_at: Mapped[datetime] = Column(DateTime(timezone=True), nullable=False)
 
-    manga_id: Mapped[uuid.UUID] = Column(UUID(as_uuid=True), ForeignKey("manga__manga.id"), nullable=False)
+    manga_id: Mapped[uuid.UUID] = Column(
+        UUID(as_uuid=True),
+        ForeignKey("manga__manga.id"),
+        nullable=False,
+    )
     manga: Mapped[Manga] = relationship("Manga", back_populates="chapters")
     pages: Mapped[MangaPage] = relationship("MangaPage", back_populates="chapter")

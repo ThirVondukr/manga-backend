@@ -18,7 +18,10 @@ async def _seed_preset_manga_chapters(
     manga_directory: Path,
 ):
     query = (
-        select(Manga).options(selectinload(Manga.chapters)).filter(Manga.title_slug == manga_directory.stem).limit(1)
+        select(Manga)
+        .options(selectinload(Manga.chapters))
+        .filter(Manga.title_slug == manga_directory.stem)
+        .limit(1)
     )
     manga = await session.scalar(query)
     for volume_directory in manga_directory.iterdir():

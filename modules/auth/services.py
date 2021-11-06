@@ -47,7 +47,7 @@ class AuthService:
 
         return schema.TokenSchema(
             access_token=token,
-            token_type="bearer"
+            token_type="bearer",
         )
 
     async def get_user_from_jwt(self, token: str) -> User:

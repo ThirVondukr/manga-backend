@@ -10,7 +10,7 @@ from gql.loaders import ModelListLoader, ModelLoader
 manga_arts: ModelListLoader[UUID, MangaArt] = ModelListLoader(
     query=select(MangaArt),
     id_attr=MangaArt.manga_id,
-    id_getter=attrgetter("manga_id")
+    id_getter=attrgetter("manga_id"),
 )
 
 manga_cover: ModelLoader[UUID, Optional[MangaArt]] = ModelLoader(

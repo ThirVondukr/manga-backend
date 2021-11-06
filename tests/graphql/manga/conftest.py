@@ -7,7 +7,7 @@ from db.models.manga import Manga
 async def seed_manga(session) -> Manga:
     manga = Manga(
         title="Title",
-        title_slug="title"
+        title_slug="title",
     )
     session.add(manga)
     await session.commit()
