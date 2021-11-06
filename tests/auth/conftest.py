@@ -1,6 +1,3 @@
-import contextlib
-from typing import ContextManager, Callable
-
 import pytest
 
 from db.models.users import User
@@ -12,16 +9,19 @@ def auth_service() -> AuthService:
     return AuthService()
 
 
-@pytest.fixture(scope="module")
-def get_user() -> Callable[..., ContextManager[User]]:
+@pytest.fixture
+def user_in_db_password() -> str:
+    return "password"
+
+
+@pytest.fixture
+async def user_in_db(session, user_in_db_password, auth_service) -> User:
     user = User(
         username="Username",
-        email="example@text.com",
+        email="example@test.com",
     )
-
-    @contextlib.contextmanager
-    def wrapper():
-        yield user
-        user.password_hash = None
-
-    return wrapper
+    auth_service.update_user_password(user, user_in_db_password)
+    session.add(user)
+    await session.commit()
+    await session.refresh(user)
+    return user

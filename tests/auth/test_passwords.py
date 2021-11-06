@@ -1,6 +1,26 @@
+import contextlib
+from typing import Callable, ContextManager
+
 import hypothesis
 import pytest
 from hypothesis.strategies import text
+
+from db.models.users import User
+
+
+@pytest.fixture(scope="module")
+def get_user() -> Callable[..., ContextManager[User]]:
+    user = User(
+        username="Username",
+        email="example@text.com",
+    )
+
+    @contextlib.contextmanager
+    def wrapper():
+        yield user
+        user.password_hash = None
+
+    return wrapper
 
 
 @hypothesis.given(password=text())
