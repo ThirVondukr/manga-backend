@@ -1,18 +1,15 @@
-from __future__ import annotations
-
 import datetime
-from typing import Optional, List, Iterable
+from typing import Optional, List
 from uuid import UUID
 
 import strawberry
-from sqlalchemy import select, func
 from strawberry import LazyType
 
-from db.dependencies import get_session
 from db.models.manga.chapters import MangaChapter
 from gql.context import Info
 from gql.manga.pages.types import MangaPageType
 from gql.mixins import OrmTypeMixin
+from . import _fields
 
 MangaType = LazyType["MangaType", "gql.manga.manga.types"]
 
@@ -29,55 +26,11 @@ class MangaChapterType(OrmTypeMixin):
     published_at: datetime.datetime
 
     manga_id: UUID
-    instance: strawberry.Private[str]
+    instance: strawberry.Private[MangaChapter]
 
-    @strawberry.field
-    async def all_chapters(self) -> List[MangaChapterType]:
-        query = (
-            select(MangaChapter)
-            .filter(MangaChapter.manga_id == self.manga_id)
-            .order_by(MangaChapter.number, func.coalesce(MangaChapter.number_extra, 0))
-        )
-
-        async with get_session() as session:
-            chapters: Iterable[MangaChapter] = await session.scalars(query)
-        return self.from_orm_list(chapters)
-
-    @strawberry.field
-    async def previous(self) -> Optional[MangaChapterType]:
-        query = (
-            select(MangaChapter)
-            .filter(
-                MangaChapter.id != self.id,
-                MangaChapter.number <= self.number,
-                func.coalesce(MangaChapter.number_extra, 0)
-                <= func.coalesce(self.number_extra, 0),
-            )
-            .order_by(
-                MangaChapter.number.desc(), func.coalesce(MangaChapter.number_extra, 0).desc()
-            )
-            .limit(1)
-        )
-        async with get_session() as session:
-            chapter: Optional[MangaChapter] = (await session.scalars(query)).one_or_none()
-        return self.from_orm_optional(chapter)
-
-    @strawberry.field
-    async def next(self) -> Optional[MangaChapterType]:
-        query = (
-            select(MangaChapter)
-            .filter(
-                MangaChapter.id != self.id,
-                MangaChapter.number >= self.number,
-                func.coalesce(MangaChapter.number_extra, 0)
-                >= func.coalesce(self.number_extra, 0),
-            )
-            .order_by(MangaChapter.number, func.coalesce(MangaChapter.number_extra, 0))
-            .limit(1)
-        )
-        async with get_session() as session:
-            chapter: Optional[MangaChapter] = (await session.scalars(query)).one_or_none()
-        return self.from_orm_optional(chapter)
+    all_chapters = strawberry.field(_fields.all_chapters)
+    previous = strawberry.field(_fields.previous)
+    next = strawberry.field(_fields.next_)
 
     @strawberry.field
     async def manga(self, info: Info) -> MangaType:
@@ -89,7 +42,7 @@ class MangaChapterType(OrmTypeMixin):
         return [MangaPageType.from_orm(page) for page in pages]
 
     @classmethod
-    def from_orm(cls, model: MangaChapter) -> MangaChapterType:
+    def from_orm(cls, model: MangaChapter) -> "MangaChapterType":
         return cls(
             id=model.id,
             created_at=model.created_at,
@@ -100,4 +53,5 @@ class MangaChapterType(OrmTypeMixin):
             title=model.title,
             published_at=model.published_at,
             manga_id=model.manga_id,
+            instance=model,
         )
