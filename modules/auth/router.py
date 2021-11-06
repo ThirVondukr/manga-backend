@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Body
 from fastapi.security import OAuth2PasswordRequestFormStrict
+from pydantic import SecretStr
 
 from modules.auth.services import AuthService
-from modules.users.services import UserService
 from . import exceptions, schema
+from ..users.repositories import UserRepository
 
 auth_router = APIRouter()
 
@@ -14,10 +15,10 @@ auth_router = APIRouter()
 )
 async def login(
     form_data: OAuth2PasswordRequestFormStrict = Depends(),
-    user_service: UserService = Depends(),
+    user_repository: UserRepository = Depends(),
     auth_service: AuthService = Depends(),
 ) -> schema.TokenSchema:
-    user = await user_service.get_by_username(username=form_data.username)
+    user = await user_repository.get_by_username(username=form_data.username)
     if user is None:
         raise exceptions.InvalidCredentialsError
 
@@ -25,3 +26,14 @@ async def login(
         raise exceptions.InvalidCredentialsError
 
     return auth_service.create_token(user)
+
+
+@auth_router.post(
+    "/token/validate/",
+    response_model=bool,
+)
+async def validate_token(
+    token: SecretStr = Body(..., embed=True),
+    auth_service: AuthService = Depends(),
+):
+    return await auth_service.validate_jwt(token.get_secret_value())
