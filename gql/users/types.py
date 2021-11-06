@@ -52,14 +52,9 @@ class UserType(OrmTypeMixin):
         pagination_pydantic: PaginationInputPydantic = pagination.to_pydantic()
 
         manga_query = (
-            select(Manga)
-            .join(MangaLike)
-            .filter(MangaLike.user_id == self.id)
-            .order_by(Manga.title_slug)
+            select(Manga).join(MangaLike).filter(MangaLike.user_id == self.id).order_by(Manga.title_slug)
         )
-        likes_count_query = select(func.count(MangaLike.manga_id)).filter(
-            MangaLike.user_id == self.id
-        )
+        likes_count_query = select(func.count(MangaLike.manga_id)).filter(MangaLike.user_id == self.id)
         manga_query = pagination_pydantic.apply_to_query(manga_query)
         async with get_session() as session:
             manga: Iterable[Manga] = (await session.scalars(manga_query)).unique()

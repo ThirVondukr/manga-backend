@@ -33,9 +33,7 @@ async def previous(self: MangaChapterType) -> Optional[LazyMangaChapterType]:
             MangaChapter.number <= self.number,
             func.coalesce(MangaChapter.number_extra, 0) <= func.coalesce(self.number_extra, 0),
         )
-        .order_by(
-            MangaChapter.number.desc(), func.coalesce(MangaChapter.number_extra, 0).desc()
-        )
+        .order_by(MangaChapter.number.desc(), func.coalesce(MangaChapter.number_extra, 0).desc())
         .limit(1)
     )
     async with get_session() as session:

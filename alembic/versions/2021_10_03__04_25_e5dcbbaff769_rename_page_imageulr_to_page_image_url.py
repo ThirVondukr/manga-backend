@@ -16,12 +16,8 @@ depends_on = None
 
 
 def upgrade():
-    op.alter_column(
-        table_name="manga__pages", column_name="imageUrl", new_column_name="image_url"
-    )
+    op.alter_column(table_name="manga__pages", column_name="imageUrl", new_column_name="image_url")
 
 
 def downgrade():
-    op.alter_column(
-        table_name="manga__pages", column_name="image_url", new_column_name="imageUrl"
-    )
+    op.alter_column(table_name="manga__pages", column_name="image_url", new_column_name="imageUrl")

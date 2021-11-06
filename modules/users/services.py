@@ -35,15 +35,11 @@ class UserService:
         return user
 
     async def create(self, user_model: UserCreateSchema) -> User:
-        duplicate_username = await self.user_repository.get_by_username(
-            username=user_model.username
-        )
+        duplicate_username = await self.user_repository.get_by_username(username=user_model.username)
         if duplicate_username:
             raise exceptions.UsernameIsTakenError
 
-        duplicate_email = await self.user_repository.get_by_clause(
-            User.email == user_model.email
-        )
+        duplicate_email = await self.user_repository.get_by_clause(User.email == user_model.email)
         if duplicate_email:
             raise exceptions.EmailIsTakenError
 

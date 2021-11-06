@@ -45,15 +45,9 @@ class MangaMutation:
                     message=f"Manga with id {manga_id} not found",
                 )
             if liked:
-                stmt = (
-                    insert(MangaLike)
-                    .values(user_id=user.id, manga_id=manga_id)
-                    .on_conflict_do_nothing()
-                )
+                stmt = insert(MangaLike).values(user_id=user.id, manga_id=manga_id).on_conflict_do_nothing()
             else:
-                stmt = delete(MangaLike).filter(
-                    MangaLike.manga_id == manga_id, MangaLike.user_id == user.id
-                )
+                stmt = delete(MangaLike).filter(MangaLike.manga_id == manga_id, MangaLike.user_id == user.id)
             await session.execute(stmt)
             await session.commit()
             await session.refresh(manga)
