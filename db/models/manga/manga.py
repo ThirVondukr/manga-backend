@@ -4,7 +4,7 @@ from sqlalchemy import Column, String, select, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship, column_property, Mapped
 
-from db._mixins import DateTimeMixin
+from db.mixins import DateTimeMixin
 from db.base import Base
 from db.models.manga import MangaChapter
 from db.models.manga.art import MangaArt

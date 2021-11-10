@@ -10,9 +10,10 @@ from sqlalchemy.orm import Mapped
 
 from db._fields import utcnow
 from db.base import Base
+from db.mixins import SoftDeleteMixin
 
 
-class User(Base):
+class User(Base, SoftDeleteMixin):
     __tablename__ = "users__users"
 
     id: Mapped[uuid.UUID] = Column(UUID(as_uuid=True), default=uuid.uuid4, primary_key=True)

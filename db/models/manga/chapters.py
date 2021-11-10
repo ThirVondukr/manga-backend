@@ -8,7 +8,7 @@ from sqlalchemy import Column, String, ForeignKey, DateTime, Integer
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship, Mapped
 
-from db._mixins import DateTimeMixin
+from db.mixins import DateTimeMixin
 from db.base import Base
 
 if TYPE_CHECKING:

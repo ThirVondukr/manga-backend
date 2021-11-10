@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import Column, DateTime
 from sqlalchemy.orm import declarative_mixin, Mapped
 
-from ._fields import utcnow
+from db._fields import utcnow
 
 
 @declarative_mixin
