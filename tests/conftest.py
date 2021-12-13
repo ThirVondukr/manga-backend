@@ -71,27 +71,26 @@ def engine(db_async_url, database):
 
 @pytest.fixture(scope="function", autouse=True)
 def create_meta(sync_engine):
-    Base.metadata.create_all(bind=sync_engine)
-    yield
-    Base.metadata.drop_all(bind=sync_engine)
+    try:
+        Base.metadata.create_all(bind=sync_engine)
+        yield
+    finally:
+        Base.metadata.drop_all(bind=sync_engine)
 
 
-@pytest.fixture(scope="session")
-def session_maker(engine) -> Callable[..., AsyncSession]:
-    return sessionmaker(future=True, class_=AsyncSession, bind=engine)
-
-
-@pytest.fixture(scope="function")
-async def session(session_maker) -> AsyncSession:
-    async with session_maker() as session:
+@pytest.fixture
+async def session(engine) -> AsyncSession:
+    async with engine.connect() as conn:
         try:
-            yield session
+            transaction = await conn.begin()
+            async with AsyncSession(future=True, bind=engine) as session:
+                yield session
         finally:
-            await session.rollback()
+            await transaction.rollback()
 
 
-@pytest.fixture(scope="session", autouse=True)
-def patch_sessionmaker(session_maker):
+@pytest.fixture(autouse=True)
+def patch_sessionmaker(session):
     """
     We patch db.dependencies._get_session with our sessionmaker
     so FastAPI and Strawberry use it instead
@@ -99,8 +98,7 @@ def patch_sessionmaker(session_maker):
 
     @asynccontextmanager
     async def get_session():
-        async with session_maker() as session:
-            yield session
+        yield session
 
     with patch.object(db.dependencies, "_get_session", new=get_session):
         yield
