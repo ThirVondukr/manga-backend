@@ -7,9 +7,7 @@ from modules.exceptions import APIException
 
 
 def touch_models():
-    import db.models
-
-    db.models  # Thanks pycharm for deleting my unused imports
+    import db.models  # noqa
 
 
 def create_app() -> FastAPI:
