@@ -7,33 +7,33 @@ authors = ["Doctor <thirvondukr@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 fastapi = "^0.70.0"
-aiofiles = "^0.7.0"
-uvicorn = "^0.15.0"
-asyncpg = "^0.24.0"
+aiofiles = "^0.8.0"
+uvicorn = "^0.16.0"
+asyncpg = "^0.25.0"
 websockets = "^10.0"
 passlib = {extras = ["argon2"], version = "^1.7.4"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-alembic = "^1.6.5"
+alembic = "^1.7.5"
 python-slugify = "^5.0.2"
 pydantic = {extras = ["email", "dotenv"], version = "^1.8.2"}
-strawberry-graphql = "^0.85.1"
+strawberry-graphql = "^0.93.4"
 SQLAlchemy = {extras = ["mypy"], version = "^1.4.26"}
 
 [tool.poetry.dev-dependencies]
-black = "^21.7b0"
+black = "^21.12b0"
 Faker = "^8.12.1"
 opentelemetry-api = "^1.5.0"
 opentelemetry-sdk = "^1.5.0"
 tox = "^3.24.4"
 mypy = "^0.910"
 types-python-slugify = "^5.0.0"
-python-dotenv = "^0.19.1"
+python-dotenv = "^0.19.2"
 pytest = "^6.2.5"
 pytest-asyncio = "^0.16.0"
 SQLAlchemy-Utils = "^0.37.9"
-psycopg2-binary = "^2.9.1"
-httpx = "^0.20.0"
-hypothesis = "^6.24.2"
+psycopg2-binary = "^2.9.2"
+httpx = "^0.21.1"
+hypothesis = "^6.31.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -42,3 +42,8 @@ build-backend = "poetry.core.masonry.api"
 [tool.black]
 line-length = 112
 target-version = ['py39']
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
